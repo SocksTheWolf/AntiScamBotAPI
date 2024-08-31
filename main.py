@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import FileResponse, RedirectResponse
 from typing import Union
 from DatabaseDriver import DatabaseDriver
 from DatabaseSchema import Ban
@@ -26,7 +27,7 @@ class APIBan(BaseModel):
 
 class APIBanDetailed(APIBan):
   banned_on: Union[datetime, None] = None
-  banned_by: str = ""
+  banned_by: str = "scamguard reviewer handle"
   
   def Create(self, user_id:int=0):
     super().Create(user_id)
@@ -67,3 +68,11 @@ def get_ban_info(user_id: int):
 @app.get("/bans", description="Get Number of All Bans", response_model=APIStats)
 def get_ban_stats():
    return APIStats().Create()
+
+@app.get('/favicon.ico', include_in_schema=False)
+async def favicon():
+  return FileResponse("favicon.ico")
+
+@app.get("/docs", include_in_schema=False, status_code=302)
+async def go_to_redocs():
+  return RedirectResponse("/redoc")
