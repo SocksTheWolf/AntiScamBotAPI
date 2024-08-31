@@ -67,7 +67,7 @@ def get_ban_info(user_id: int):
 
 @app.get("/bans", description="Get Number of All Bans", response_model=APIStats)
 def get_ban_stats():
-   return APIStats().Create()
+   return APIStats().Execute()
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
