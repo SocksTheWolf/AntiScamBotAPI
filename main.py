@@ -7,7 +7,7 @@ db = DatabaseDriver()
 
 @app.get("/")
 def main():
-  return "There is nothing here"
+  return {result: False}
   
 @app.get("/check/{user_id}")
 def check_ban(user_id: int):
