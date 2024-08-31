@@ -13,10 +13,10 @@ class APIBan(BaseModel):
   user_id: int
   valid: bool = False
   
-  def __init__(self, user_id:int=0, **kwargs):
-    super.__init__(**kwargs)
+  def Create(self, user_id:int=0):
     self.user_id = user_id
     self.valid = (user_id >= 1)
+    return self
    
   def Check(self):
     BanInfo:Ban|None = db.GetBanInfo(self.user_id)
@@ -28,12 +28,13 @@ class APIBanDetailed(APIBan):
   banned_on: Union[datetime, None] = None
   banned_by: str = ""
   
-  def __init__(self, user_id:int=0, **kwargs):
-    super().__init__(user_id,**kwargs)
+  def Create(self, user_id:int=0):
+    super().Create(user_id)
     self.banned_on = None
     self.banned_by = ""
+    return self
   
-  def Check(self, user_id:int):    
+  def Check(self):    
     BanInfo:Ban|None = db.GetBanInfo(self.user_id)
     IsBanned:bool = (BanInfo is not None)
     self.banned = IsBanned
@@ -50,11 +51,11 @@ def main():
   
 @app.get("/check/{user_id}", summary="Check if a Discord UserID is banned", response_model=APIBan)
 def check_ban(user_id: int):
-  return APIBan(user_id).Check()
+  return APIBan().Create(user_id).Check()
 
 @app.get("/ban/{user_id}", summary="Get extensive information as to an UserID being banned", response_model=APIBanDetailed)
 def get_ban_info(user_id: int):
-  return APIBanDetailed(user_id).Check()
+  return APIBanDetailed().Create(user_id).Check()
 
 @app.get("/bans", summary="Get Number of All Bans")
 def get_ban_stats():
