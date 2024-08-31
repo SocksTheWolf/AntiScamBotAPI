@@ -7,12 +7,12 @@ db = DatabaseDriver()
 
 @app.get("/")
 def main():
-	return "There is nothing here"
-	
+  return "There is nothing here"
+  
 @app.get("/check/{user_id}")
 def check_ban(user_id: int):
   IsDataGood:bool = (user_id >= 1)
-	return {"banned": db.DoesBanExist(user_id), "result": IsDataGood}
+  return {"banned": db.DoesBanExist(user_id), "result": IsDataGood}
 
 @app.get("/ban/{user_id}")
 def get_ban_info(user_id: int):
