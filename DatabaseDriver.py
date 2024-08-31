@@ -2,6 +2,7 @@ from DatabaseSchema import Ban
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, select, URL, desc, func
 from sqlalchemy.orm import Session
+import os
 
 load_dotenv()
 
