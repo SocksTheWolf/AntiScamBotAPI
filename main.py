@@ -3,6 +3,7 @@ from typing import Union
 from DatabaseDriver import DatabaseDriver
 from DatabaseSchema import Ban
 from pydantic import BaseModel
+import datetime
 
 app = FastAPI(docs_url=None)
 db = DatabaseDriver()
