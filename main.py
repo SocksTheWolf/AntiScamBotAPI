@@ -14,6 +14,7 @@ class APIBan(BaseModel):
   valid: bool = False
   
   def __init__(self, user_id:int=0):
+    super.__init__()
     self.user_id = user_id
     self.valid = (user_id >= 1)
    
