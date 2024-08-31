@@ -24,7 +24,7 @@ class DatabaseDriver():
       username='',
       password='',
       host='',
-      database=Config.GetDBFile(),
+      database=DatabaseDriver.GetDatabaseFile(),
     )
     self.Database = Session(create_engine(database_url))
 
