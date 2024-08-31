@@ -13,8 +13,8 @@ class APIBan(BaseModel):
   user_id: int
   valid: bool = False
   
-  def __init__(self, user_id:int=0):
-    super.__init__(...)
+  def __init__(self, user_id:int=0, **kwargs):
+    super.__init__(**kwargs)
     self.user_id = user_id
     self.valid = (user_id >= 1)
    
@@ -28,8 +28,8 @@ class APIBanDetailed(APIBan):
   banned_on: Union[datetime, None] = None
   banned_by: str = ""
   
-  def __init__(self, user_id:int=0):
-    super().__init__(user_id)
+  def __init__(self, user_id:int=0, **kwargs):
+    super().__init__(user_id,**kwargs)
     self.banned_on = None
     self.banned_by = ""
   
