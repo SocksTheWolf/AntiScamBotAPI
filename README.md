@@ -1,2 +1,2 @@
 # AntiScamBotAPI
-API for querying ScamBot via API GET fetches
+API for querying ScamBot via HTTP Get
