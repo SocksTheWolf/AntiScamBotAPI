@@ -47,7 +47,6 @@ def main():
   
 @app.get("/check/{user_id}", summary="Check if a Discord UserID is banned", response_model=APIBan)
 def check_ban(user_id: int):
-  BanInfo:APIBan = 
   return APIBan(user_id).Check()
 
 @app.get("/ban/{user_id}", summary="Get extensive information as to an UserID being banned", response_model=APIBanDetailed)
