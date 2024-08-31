@@ -9,8 +9,8 @@ app = FastAPI(docs_url=None)
 db = DatabaseDriver()
 
 class APIBan(BaseModel):
-  banned: bool
-  user_id: int
+  banned: bool = False
+  user_id: int = 0
   valid: bool = False
   
   def Create(self, user_id:int=0):
