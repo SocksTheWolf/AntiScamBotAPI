@@ -1,27 +1,59 @@
 from fastapi import FastAPI
 from DatabaseDriver import DatabaseDriver
 from DatabaseSchema import Ban
+from pydantic import BaseModel
 
-app = FastAPI()
+app = FastAPI(docs_url=None)
 db = DatabaseDriver()
 
-@app.get("/")
+class APIBan(BaseModel):
+  banned: bool
+  user_id: int
+  valid: bool = False
+  
+  def __init__(self, user_id:int=0):
+    self.user_id = user_id
+    self.valid = (user_id >= 1)
+   
+  def Check(self):
+    BanInfo:Ban|None = db.GetBanInfo(self.user_id)
+    IsBanned:bool = (BanInfo is not None)
+    self.banned = IsBanned
+    return self
+
+class APIBanDetailed(APIBan):
+  banned_on: Union[datetime, None] = None
+  banned_by: str = ""
+  
+  def __init__(self, user_id:int=0):
+    super().__init__(user_id)
+    self.banned_on = None
+    self.banned_by = ""
+  
+  def Check(self, user_id:int):    
+    BanInfo:Ban|None = db.GetBanInfo(self.user_id)
+    IsBanned:bool = (BanInfo is not None)
+    self.banned = IsBanned
+    
+    if IsBanned:
+      self.banned_on = BanInfo.created_at
+      self.banned_by = BanInfo.assigner_discord_user_name
+      
+    return self
+
+@app.get("/", include_in_schema=False)
 def main():
   return {"msg": "There is no war in ba sing sei"}
   
-@app.get("/check/{user_id}")
+@app.get("/check/{user_id}", summary="Check if a Discord UserID is banned", response_model=APIBan)
 def check_ban(user_id: int):
-  IsDataGood:bool = (user_id >= 1)
-  return {"banned": db.DoesBanExist(user_id), "valid": IsDataGood}
+  BanInfo:APIBan = 
+  return APIBan(user_id).Check()
 
-@app.get("/ban/{user_id}")
+@app.get("/ban/{user_id}", summary="Get extensive information as to an UserID being banned", response_model=APIBanDetailed)
 def get_ban_info(user_id: int):
-   BanInfo:Ban|None = db.GetBanInfo(user_id)
-   if BanInfo is None:
-     return {"banned": False, "user_id": user_id}
-     
-   return {"banned": True, "user_id": BanInfo.discord_user_id, "banned_by": BanInfo.assigner_discord_user_name, "banned_on": BanInfo.created_at}
+  return APIBanDetailed(user_id).Check()
 
-@app.get("/bans")
+@app.get("/bans", summary="Get Number of All Bans")
 def get_ban_stats():
    return {"count": db.GetNumBans()}
