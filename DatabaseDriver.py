@@ -57,7 +57,7 @@ class DatabaseDriver():
 
   def GetBanInfo(self, TargetId:int) -> Ban|None:
     if (TargetId <= 0):
-      return False
+      return None
     
     stmt = select(Ban).where(Ban.discord_user_id==TargetId)
     return self.Database.scalars(stmt).first()
