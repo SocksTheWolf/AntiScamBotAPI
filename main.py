@@ -54,9 +54,9 @@ class APIStats(BaseModel):
     self.count = db.GetNumBans()
     return self
 
-@app.get("/", include_in_schema=False)
+@app.get("/", include_in_schema=False, response_class=RedirectResponse, status_code=302)
 def main():
-  return {"msg": "There is no war in ba sing sei"}
+  return "https://api.scamguard.app/docs"
   
 @app.get("/check/{user_id}", description="Check if a Discord UserID is banned", response_model=APIBan)
 def check_ban(user_id: int):
