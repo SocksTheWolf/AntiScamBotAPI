@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi
 from fastapi.responses import FileResponse, RedirectResponse
 from typing import Union
 from DatabaseDriver import DatabaseDriver
@@ -6,7 +7,7 @@ from DatabaseSchema import Ban
 from pydantic import BaseModel
 from datetime import datetime
 
-app = FastAPI(docs_url=None)
+app = FastAPI(docs_url=None, redoc_url="/docs")
 db = DatabaseDriver()
 
 class APIBan(BaseModel):
@@ -73,6 +74,18 @@ def get_ban_stats():
 async def favicon():
   return FileResponse("favicon.ico")
 
-@app.get("/docs", include_in_schema=False, status_code=302)
-async def go_to_redocs():
-  return RedirectResponse("/redoc")
+
+def custom_openapi():
+  if app.openapi_schema:
+    return app.openapi_schema
+  openapi_schema = get_openapi(
+    title="ScamGuard API",
+    version="0.5.0",
+    summary="This is the API to interface with ScamGuard",
+    description="NOTE: all API calls require an Authorization bearer token header (currently not enforced), otherwise they will fail. If you would like to obtain a token header, please reach out to SocksTheWolf",
+    routes=app.routes,
+  )
+  app.openapi_schema = openapi_schema
+  return app.openapi_schema
+  
+app.openapi = custom_openapi
