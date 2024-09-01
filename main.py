@@ -23,7 +23,7 @@ If you would like to obtain an API Token, please send a message in the `#api-req
 """
 
 app = FastAPI(docs_url=None, redoc_url="/docs", description=global_description, title=global_title, summary=global_summary, 
-              contact={name:"SocksTheWolf", "url":"https://socksthewolf.com/contact"}, terms_of_service="https://scamguard.app/terms", 
+              contact={"name":"SocksTheWolf", "url":"https://socksthewolf.com/contact"}, terms_of_service="https://scamguard.app/terms", 
               license_info={"name":"MIT License", "url":"https://github.com/SocksTheWolf/AntiScamBotAPI/blob/main/LICENSE"})
 
 db = DatabaseDriver()
