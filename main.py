@@ -7,7 +7,25 @@ from DatabaseSchema import Ban
 from pydantic import BaseModel
 from datetime import datetime
 
-app = FastAPI(docs_url=None, redoc_url="/docs")
+# Global Names
+global_title = "ScamGuard API"
+global_version = "1.0.0"
+global_summary = "An API for interfacing with ScamGuard data"
+global_description = """
+# ScamGuard API
+
+This API allows you to interface and query operational information about ScamGuard's database!
+
+**NOTE**: all API calls require an `Authorization: Bearer token` header, otherwise the request will fail. 
+
+If you would like to obtain an API Token, please send a message in the `#api-requests` channel of the [ScamGuard Discord server](https://scamguard.app/discord).
+
+"""
+
+app = FastAPI(docs_url=None, redoc_url="/docs", description=global_description, title=global_title, summary=global_summary, 
+              contact={name:"SocksTheWolf", "url":"https://socksthewolf.com/contact"}, terms_of_service="https://scamguard.app/terms", 
+              license_info={"name":"MIT License", "url":"https://github.com/SocksTheWolf/AntiScamBotAPI/blob/main/LICENSE"})
+
 db = DatabaseDriver()
 
 class APIBan(BaseModel):
@@ -79,10 +97,10 @@ def custom_openapi():
   if app.openapi_schema:
     return app.openapi_schema
   openapi_schema = get_openapi(
-    title="ScamGuard API",
-    version="1.0.0",
-    summary="This is the API to interface with ScamGuard",
-    description="**NOTE**: all API calls require an `Authorization: Bearer token` header, otherwise the request will fail. If you would like to obtain an API Token, please send a message in the `#api-requests` channel of the [ScamGuard Discord server](https://scamguard.app/discord).",
+    title=global_title,
+    version=global_version,
+    summary=global_summary,
+    description=description,
     routes=app.routes,
   )
   app.openapi_schema = openapi_schema
