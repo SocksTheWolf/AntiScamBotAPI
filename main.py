@@ -67,6 +67,7 @@ class APIBanDetailed(APIBan):
 
 class APIStats(BaseModel):
   count:int = 0
+  valid:bool = True
   
   def Execute(self):
     self.count = db.GetNumBans()
