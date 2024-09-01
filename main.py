@@ -82,7 +82,7 @@ def custom_openapi():
     title="ScamGuard API",
     version="1.0.0",
     summary="This is the API to interface with ScamGuard",
-    description="NOTE: all API calls require an `Authorization: Bearer token` header, otherwise the request will fail. If you would like to obtain an API Token, please send a message in the #api-requests channel of the ScamGuard Discord server.",
+    description="**NOTE**: all API calls require an `Authorization: Bearer token` header, otherwise the request will fail. If you would like to obtain an API Token, please send a message in the `#api-requests` channel of the [ScamGuard Discord server](https://scamguard.app/discord).",
     routes=app.routes,
   )
   app.openapi_schema = openapi_schema
