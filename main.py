@@ -100,7 +100,7 @@ def custom_openapi():
     title=global_title,
     version=global_version,
     summary=global_summary,
-    description=description,
+    description=global_description,
     routes=app.routes,
   )
   app.openapi_schema = openapi_schema
