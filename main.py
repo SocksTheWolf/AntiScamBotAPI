@@ -39,9 +39,10 @@ class APIBan(BaseModel):
     return self
    
   def Execute(self):
-    BanInfo:Ban|None = db.GetBanInfo(self.user_id)
-    IsBanned:bool = (BanInfo is not None)
-    self.banned = IsBanned
+    return self.ExecuteOnData(db.GetBanInfo(self.user_id))
+    
+  def ExecuteOnData(self, BanInfo:Ban|None):
+    self.banned = (BanInfo is not None)
     return self
 
 class APIBanDetailed(APIBan):
@@ -56,10 +57,9 @@ class APIBanDetailed(APIBan):
   
   def Execute(self):    
     BanInfo:Ban|None = db.GetBanInfo(self.user_id)
-    IsBanned:bool = (BanInfo is not None)
-    self.banned = IsBanned
+    super().ExecuteOnData(BanInfo)
     
-    if IsBanned:
+    if self.banned:
       self.banned_on = BanInfo.created_at
       self.banned_by = BanInfo.assigner_discord_user_name
       
@@ -71,20 +71,24 @@ class APIStats(BaseModel):
   def Execute(self):
     self.count = db.GetNumBans()
     return self
+    
+class APIAuthError(BaseModel):
+  valid: bool = False
+  msg: str = "Invalid Auth Key Provided"
 
 @app.get("/", include_in_schema=False, response_class=RedirectResponse, status_code=302)
 def main():
   return "https://api.scamguard.app/docs"
   
-@app.get("/check/{user_id}", description="Check if a Discord UserID is banned", response_model=APIBan)
+@app.get("/check/{user_id}", description="Check if a Discord UserID is banned", response_model=APIBan, responses={403: {"model": APIAuthError}})
 def check_ban(user_id: int):
   return APIBan().Create(user_id).Execute()
 
-@app.get("/ban/{user_id}", description="Get extensive information as to an UserID being banned", response_model=APIBanDetailed)
+@app.get("/ban/{user_id}", description="Get extensive information as to an UserID being banned", response_model=APIBanDetailed, responses={403: {"model": APIAuthError}})
 def get_ban_info(user_id: int):
   return APIBanDetailed().Create(user_id).Execute()
 
-@app.get("/bans", description="Get Number of All Bans", response_model=APIStats)
+@app.get("/bans", description="Get Number of All Bans", response_model=APIStats, responses={403: {"model": APIAuthError}})
 def get_ban_stats():
    return APIStats().Execute()
 
