@@ -12,7 +12,7 @@ global_title = "ScamGuard API"
 global_version = "1.0.0"
 global_summary = "An API for interfacing with ScamGuard data"
 global_description = """
-# ScamGuard API
+# Info
 
 This API allows you to interface and query operational information about ScamGuard's database!
 
