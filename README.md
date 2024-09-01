@@ -10,7 +10,7 @@ This setup assumes you know how to [setup a python virtual environment already](
 Clone the project somewhere that can access your AntiScamBot database file, and then create an .env with the following information
 
 ```
-DATABASE_FILE="PATH TO DATABASE FILE
+DATABASE_FILE="PATH TO DATABASE FILE"
 ```
 Run with `fastapi run` or via the run script in the `.runtime` folder.
 
